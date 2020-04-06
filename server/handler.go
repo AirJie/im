@@ -3,16 +3,23 @@ package server
 import (
 	"encoding/json"
 	"golang.org/x/net/websocket"
+	"log"
 	"net/http"
 	"strings"
 	"time"
 )
+
 var (
 	UserId = "user_id"
 )
 
 type Handler struct {
-	ws *WsServer
+	ws         *WsServer
+	httpServer *HttpServer
+}
+
+func NewHandler(ws *WsServer, hs *HttpServer) *Handler{
+	return &Handler{ws, hs}
 }
 
 func (h *Handler) MessageHandler(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +30,12 @@ func (h *Handler) MessageHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode("invalid body")
 	}
-	h.ws.SendMessage(m.UserId, m.Message)
+	log.Println("New Message from:", m.UserId)
+	err = h.ws.SendMessage(m.UserId, m.Message)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+	}
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(m)
 }

@@ -32,6 +32,10 @@ type WsServer struct {
 	DelCli  chan *Client
 }
 
+type HttpServer struct {
+	wsServer *WsServer
+}
+
 type Client struct {
 	UserId    string
 	Timestamp int64
@@ -50,6 +54,10 @@ func NewWsServer() *WsServer {
 		AddCli: make(chan *Client, ClientNums),
 		DelCli: make(chan *Client, ClientNums),
 	}
+}
+
+func NewHttpServer(ws *WsServer) *HttpServer{
+	return &HttpServer{wsServer:ws}
 }
 
 func (ws *WsServer) addClient(c *Client) error {
@@ -88,6 +96,7 @@ func (ws *WsServer) Start() {
 func (ws *WsServer) SendMessage(userId, message string) error {
 	client := ws.Clients[userId]
 	if client == nil {
+		log.Fatal("There is no valid Client")
 		return ErrClientNotFound
 	}
 	go client.sendMessage(userId, message)
