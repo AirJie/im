@@ -1,4 +1,4 @@
-package server
+package ws_service
 
 import (
 	"encoding/json"

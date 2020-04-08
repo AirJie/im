@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/aijie/michat/server"
+	"github.com/aijie/michat/ws_service"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/websocket"
 	"log"
@@ -10,9 +10,9 @@ import (
 
 
 func main() {
-	ws := server.NewWsServer()
-	htps := server.NewHttpServer(ws)
-	h := server.NewHandler(ws, htps)
+	ws := ws_service.NewWsServer()
+	htps := ws_service.NewHttpServer(ws)
+	h := ws_service.NewHandler(ws, htps)
 
 	go ws.Start()
 	r := mux.NewRouter()

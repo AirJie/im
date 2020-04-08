@@ -1,12 +1,10 @@
-package server
+package ws_service
 
 import (
-	"encoding/json"
 	"errors"
-	"golang.org/x/net/websocket"
+	//"github.com/gorilla/websocket"
 	"log"
 	"sync"
-	"time"
 )
 
 var (
@@ -14,9 +12,9 @@ var (
 )
 
 const (
-	ListenInterval = 5
+	ListenInterval  = 5
 	MessageChanSize = 20
-	ClientNums = 20
+	ClientNums      = 20
 )
 
 type WsService interface {
@@ -36,28 +34,18 @@ type HttpServer struct {
 	wsServer *WsServer
 }
 
-type Client struct {
-	UserId    string
-	Timestamp int64
-	conn      *websocket.Conn
-}
-
-type Message struct {
-	UserId  string `json:"user_id"`
-	Message string `json:"message"`
-}
 
 func NewWsServer() *WsServer {
 	return &WsServer{
 		Clients: make(map[string]*Client),
 		Message: make(chan *Message, MessageChanSize),
-		AddCli: make(chan *Client, ClientNums),
-		DelCli: make(chan *Client, ClientNums),
+		AddCli:  make(chan *Client, ClientNums),
+		DelCli:  make(chan *Client, ClientNums),
 	}
 }
 
-func NewHttpServer(ws *WsServer) *HttpServer{
-	return &HttpServer{wsServer:ws}
+func NewHttpServer(ws *WsServer) *HttpServer {
+	return &HttpServer{wsServer: ws}
 }
 
 func (ws *WsServer) addClient(c *Client) error {
@@ -103,28 +91,3 @@ func (ws *WsServer) SendMessage(userId, message string) error {
 	return nil
 }
 
-func (c *Client) sendMessage(userId, message string) {
-	if c.conn != nil {
-		c.conn.Write([]byte(message))
-	}
-}
-
-func (c *Client) heartbeat() error {
-	millis := time.Now().UnixNano() / 1e6
-	heartbeat := struct {
-		Heartbeat int64 `json:heartbeat`
-	}{millis}
-	bytes, _ := json.Marshal(heartbeat)
-	_, err := c.conn.Write(bytes)
-	return err
-}
-
-func (c *Client) Listen() {
-	for range time.Tick(ListenInterval * time.Second) {
-		err := c.heartbeat()
-		if err != nil {
-			log.Println("heartbeat error")
-			return
-		}
-	}
-}
