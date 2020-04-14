@@ -1,0 +1,15 @@
+syntax = "proto3";
+import  "message.proto";
+package pb;
+
+message DeliverMessageReq {
+  int64 id = 1;
+  Message message = 2;
+}
+
+message DeliverMessageResp {
+}
+
+service ConnInit{
+  rpc DeliverMessage(DeliverMessageReq) returns (DeliverMessageResp);
+}

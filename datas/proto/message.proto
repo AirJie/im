@@ -1,0 +1,61 @@
+syntax = "proto3";
+package pb;
+
+message Output {
+  SessionType type = 1;
+  int64 id = 2;
+  int32 errcode = 3;
+  string message = 4;
+  bytes data = 5;
+}
+
+message Input {
+  SessionType type = 1;
+  int64 required_id = 2;
+  bytes data = 3;
+}
+
+enum SessionType {
+  Unknown = 0;
+  SignIn = 1;
+  Sync = 2;
+  Heartbeat = 3;
+  MessageStream = 4;
+}
+
+message Message {
+  int64 request_id = 1;
+  int64 receiver_id = 2;
+  repeated int64 receiver_ids = 3;
+  MessageType messageType = 4;
+  MessageBody messageBody = 5;
+}
+
+message MessageBody{
+  MessageType messageType = 1;
+  MessageContent messageContent = 2;
+}
+
+enum MessageType {
+  MsgUnknown = 0;
+  MsgText = 1;
+  MsgImage = 2;
+}
+
+message MessageContent {
+  oneof content {
+    Text text = 1;
+    Image image = 2;
+  }
+}
+
+message Text {
+  string text = 1;
+}
+
+message Image {
+  string id = 1;
+  int32 width = 2;
+  int32 height = 3;
+  string url = 4;
+}

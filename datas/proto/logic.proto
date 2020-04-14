@@ -1,0 +1,54 @@
+syntax = "proto3";
+import "message.proto";
+package pb;
+
+message SignInReq {
+  int64 app_id = 1;
+  int64 device_id = 2;
+  int64 user_id = 3;
+  int64 token = 4;
+  string conn_addr = 5;
+}
+
+message SignInResp{
+}
+
+message SyncReq{
+  int64 app_id = 2;
+  int64 user_id = 3;
+  int64 device_id = 4;
+  int64 seq = 5;
+}
+
+message SyncResp{
+  repeated Message messages = 3;
+}
+
+message MessageACKReq {
+  int64 app_id = 1;
+  int64 user_id = 2;
+  int64 device_id = 3;
+  string message_id = 4;
+  int64 device_ack = 5;
+  int64 timestamp = 6;
+}
+
+message MessageACKResp {
+}
+
+message OfflineReq {
+  int64 app_id = 1;
+  int64 user_id = 2;
+  int64 device_id = 3;
+}
+
+message OfflineResp {
+
+}
+
+service LogicInt {
+  rpc SignIn (SignInReq) returns (SignInResp);
+  rpc Sync (SyncReq) returns (SyncResp);
+  rpc MessageACK (MessageACKReq) returns (MessageACKResp);
+  rpc Offline (OfflineReq) returns(OfflineResp);
+}
