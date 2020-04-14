@@ -1,5 +1,5 @@
 syntax = "proto3";
-import "message.proto";
+import "tcp.proto";
 package pb;
 
 message SignInReq {
@@ -47,8 +47,8 @@ message OfflineResp {
 }
 
 service LogicInt {
-  rpc SignIn (SignInReq) returns (SignInResp);
-  rpc Sync (SyncReq) returns (SyncResp);
-  rpc MessageACK (MessageACKReq) returns (MessageACKResp);
-  rpc Offline (OfflineReq) returns(OfflineResp);
+  rpc SignIn (SignInReq) returns (SignInResp){}
+  rpc Sync (SyncReq) returns (SyncResp){}
+  rpc MessageACK (MessageACKReq) returns (MessageACKResp){}
+  rpc Offline (OfflineReq) returns(OfflineResp){}
 }

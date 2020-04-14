@@ -1,5 +1,5 @@
 syntax = "proto3";
-import  "message.proto";
+import "tcp.proto";
 package pb;
 
 message DeliverMessageReq {

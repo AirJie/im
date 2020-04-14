@@ -1,4 +1,4 @@
-package ws_service
+package ws_conn
 
 import (
 	"github.com/aijie/michat/datas/pb"
@@ -6,7 +6,6 @@ import (
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc/status"
 
-	//"golang.org/x/net/websocket"
 	"github.com/gorilla/websocket"
 	"log"
 )
@@ -16,18 +15,8 @@ type Linker struct {
 	AppId    int64
 	UserId   int64
 	DeviceId int64
-	Message  chan *Message
+	Message  chan *pb.Message
 }
-
-type messageType int
-
-const (
-	UnknownType messageType = iota
-	SignInType
-	SyncType
-	HeartbeatType
-	MessageType
-)
 
 func NewLink(conn *websocket.Conn, appId, userId, deviceId int64) *Linker {
 	return &Linker{
@@ -62,11 +51,15 @@ func (r *Linker) HandleMessage(data []byte) {
 	case pb.SessionType_Heartbeat:
 		r.Heartbeat(input)
 	case pb.SessionType_Sync:
+
 	case pb.SessionType_SignIn:
 	case pb.SessionType_MessageStream:
 	default:
 		logger.Sugar.Error("input type error")
 	}
+}
+
+func (r *Linker) Sync(input pb.Input) {
 }
 
 func (r *Linker) Output(ptype pb.SessionType, requestId int64, err error, message proto.Message) {

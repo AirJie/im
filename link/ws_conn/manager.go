@@ -1,25 +1,22 @@
-package repositories
+package ws_conn
 
 import (
-	"golang.org/x/net/websocket"
 	"log"
 	"sync"
 )
 
 var manager sync.Map
 
-
-
-func load(deviceId int64) *Link {
+func load(deviceId int64) *Linker {
 	value, ok := manager.Load(deviceId)
 	if !ok {
 		log.Fatal("Failed to load", ok)
 		return nil
 	}
-	return value.(*Link)
+	return value.(*Linker)
 }
 
-func store(deviceId int64, link *Link) {
+func store(deviceId int64, link *Linker) {
 	manager.Store(deviceId, link)
 }
 
