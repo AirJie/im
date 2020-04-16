@@ -11,8 +11,23 @@ message Output {
 
 message Input {
   SessionType type = 1;
-  int64 required_id = 2;
+  int64 request_id = 2;
   bytes data = 3;
+}
+
+message SignInput{
+  int64 app_id = 1;
+  int64 device_id = 2;
+  int64 user_id = 3;
+  string token = 4;
+}
+
+message SyncInput {
+  int64 seq = 1;
+}
+
+message SyncOutput {
+  repeated Message messages = 3;
 }
 
 enum SessionType {
@@ -23,12 +38,45 @@ enum SessionType {
   MessageStream = 4;
 }
 
+enum SenderType {
+  STypeUnknown = 0;
+  STypeSystem = 1;
+  STypeUser = 2;
+  STypeBusiness = 3;
+}
+
+enum ReceiveType {
+  RTypeUnknown = 0;
+  RTypeUser = 1;
+  RTypeGroup = 2;
+}
+
+enum MessageStatus {
+  MSUnknown = 0;
+  MSNormal = 1;
+  MSRecall = 2;
+}
+
 message Message {
   int64 request_id = 1;
-  int64 receiver_id = 2;
-  repeated int64 receiver_ids = 3;
-  MessageType messageType = 4;
-  MessageBody messageBody = 5;
+
+  SenderType sender_type = 2;
+  int64 sender_id = 3;
+  int64 sender_device_id = 4;
+
+  ReceiveType receiver_type = 5;
+  int64 receiver_id = 6;
+  repeated int64 at_user_ids = 7;
+
+  int64 seq = 8;
+  int64 send_time = 9;
+  MessageBody messageBody = 10;
+  MessageStatus status = 11;
+}
+
+message MessageACK {
+  int64 device_ack = 2;
+  int64 receive_time = 3;
 }
 
 message MessageBody{
