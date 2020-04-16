@@ -2,6 +2,7 @@ package grpclib
 
 import (
 	"context"
+	"github.com/aijie/michat/server/errorcode"
 	"google.golang.org/grpc/metadata"
 	"strconv"
 )
@@ -33,11 +34,11 @@ func GetCtxAppId(ctx context.Context) int64 {
 func GetCtxInfo(ctx context.Context) (int64, int64, int64, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		return 0, 0, 0,
+		return 0, 0, 0, errorcode.ErrUnauthorized
 	}
 	userIds, ok := md[CtxUserId]
 	if !ok && len(userIds) == 0{
-		return 0
+		return 0, 0, 0, errorcode.ErrUserNotExist
 	}
 	userId, err := strconv.ParseInt(userIds[0], 10, 64)
 	if err != nil {

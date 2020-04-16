@@ -3,7 +3,8 @@ package ws_conn
 import (
 	"context"
 	"github.com/aijie/michat/datas/pb"
-	"github.com/aijie/michat/logger"
+	"github.com/aijie/michat/server/grpclib"
+	"github.com/aijie/michat/server/logger"
 )
 
 func DeliverMessage(ctx context.Context, req *pb.DeliverMessageReq) error {
@@ -12,5 +13,7 @@ func DeliverMessage(ctx context.Context, req *pb.DeliverMessageReq) error {
 		logger.Sugar.Warn("conn id not found")
 		return nil
 	}
-	conn.Output(pb.SessionType_MessageStream, grpclib.)
+	reqId := grpclib.GetCtxRequestId(ctx)
+	conn.Output(pb.SessionType_MessageStream, reqId, nil, req.Message)
+	return nil
 }

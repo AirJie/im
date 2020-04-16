@@ -3,8 +3,8 @@ package ws_conn
 import (
 	"context"
 	"github.com/aijie/michat/datas/pb"
-	"github.com/aijie/michat/logger"
 	"github.com/aijie/michat/server/grpclib"
+	"github.com/aijie/michat/server/logger"
 	"github.com/aijie/michat/server/rpc_cli"
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc/status"

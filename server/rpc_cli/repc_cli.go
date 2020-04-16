@@ -3,7 +3,7 @@ package rpc_cli
 import (
 	"context"
 	"github.com/aijie/michat/datas/pb"
-	"github.com/aijie/michat/logger"
+	"github.com/aijie/michat/server/logger"
 	"google.golang.org/grpc"
 )
 
