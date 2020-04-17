@@ -8,7 +8,7 @@ import (
 type Codec struct {
 	f       *CodecFactory
 	Conn    net.Conn
-	//ReadBuf buffer
+	ReadBuf buffer
 }
 
 type CodecFactory struct {
