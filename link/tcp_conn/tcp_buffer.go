@@ -63,4 +63,3 @@ func (b *buffer) read(offest, limit int) ([]byte, error) {
 	b.start += offest + limit
 	return buf, nil
 }
-

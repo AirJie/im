@@ -2,6 +2,7 @@ package tcp_conn
 
 import (
 	"context"
+	"github.com/aijie/michat/config"
 	"github.com/aijie/michat/datas/pb"
 	"github.com/aijie/michat/server/logger"
 	"google.golang.org/grpc"
@@ -24,13 +25,14 @@ func UnaryServerInterceptor(ctx context.Context, req interface{}, info *grpc.Una
 }
 
 func StartRPCServer() {
-	listener, err := net.Listen("tcp", "localhost:8080")
+	listener, err := net.Listen("tcp", config.ConnConf.RPCListenAddr)
 	if err != nil {
 		logger.Sugar.Error(err)
 		panic(err)
 	}
 	server := grpc.NewServer(grpc.UnaryInterceptor(UnaryServerInterceptor))
 	var connServer TcpConnServer
+	logger.Logger.Info("rpc running")
 	pb.RegisterConnInitServer(server, &connServer)
 	server.Serve(listener)
 }

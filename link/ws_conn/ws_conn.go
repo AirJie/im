@@ -2,8 +2,8 @@ package ws_conn
 
 import (
 	"context"
+	"github.com/aijie/michat/datas/model"
 	"github.com/aijie/michat/datas/pb"
-	"github.com/aijie/michat/server/grpclib"
 	"github.com/aijie/michat/server/logger"
 	"github.com/aijie/michat/server/rpc_cli"
 	"github.com/golang/protobuf/proto"
@@ -72,7 +72,7 @@ func (r *Linker) Sync(input pb.Input) {
 		r.Release()
 		return
 	}
-	resp, err := rpc_cli.LogicIntClient.Sync(grpclib.ContextWithRequestId(context.TODO(), input.RequestId), &pb.SyncReq{
+	resp, err := rpc_cli.LogicIntClient.Sync(model.ContextWithRequestId(context.TODO(), input.RequestId), &pb.SyncReq{
 		AppId:    r.AppId,
 		UserId:   r.UserId,
 		DeviceId: r.DeviceId,
@@ -93,7 +93,7 @@ func (r *Linker) MessageACK(input pb.Input) {
 		r.Release()
 		return
 	}
-	rpc_cli.LogicIntClient.MessageACK(grpclib.ContextWithRequestId(context.TODO(), input.RequestId), &pb.MessageACKReq{
+	rpc_cli.LogicIntClient.MessageACK(model.ContextWithRequestId(context.TODO(), input.RequestId), &pb.MessageACKReq{
 		AppId:     r.AppId,
 		UserId:    r.UserId,
 		DeviceId:  r.UserId,

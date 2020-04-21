@@ -6,7 +6,7 @@ message SignInReq {
   int64 app_id = 1;
   int64 device_id = 2;
   int64 user_id = 3;
-  int64 token = 4;
+  string token = 4;
   string conn_addr = 5;
 }
 
@@ -43,7 +43,6 @@ message OfflineReq {
 }
 
 message OfflineResp {
-
 }
 
 service LogicInt {
@@ -51,4 +50,51 @@ service LogicInt {
   rpc Sync (SyncReq) returns (SyncResp){}
   rpc MessageACK (MessageACKReq) returns (MessageACKResp){}
   rpc Offline (OfflineReq) returns(OfflineResp){}
+}
+
+//logic client
+message RegisterDeviceReq {
+  int64 app_id = 1;
+  int32 type = 2;
+  string brand = 3;
+  string model = 4;
+}
+
+message RegisterDeviceResp {
+  int64 device_id = 1;
+}
+
+message AddUserReq {
+  int64 user_id = 1;
+}
+
+message AddUserResp {
+}
+
+message GetUserReq {
+  int64 user_id = 1;
+}
+
+message GetUserResp {
+  int64 user_id = 1;
+}
+
+message SendMessageReq {
+  int64 message_id = 1;
+  ReceiveType receiver_type = 2;
+  int64 receiver_id = 3;
+  repeated int64 receiver_ids = 4;
+  MessageBody message_body = 5;
+  int64 sent_time = 6;
+  bool is_persist = 7;
+}
+
+message SendMessageResp {
+}
+
+service LogicClientExt {
+  rpc RegisterDevice (RegisterDeviceReq) returns (RegisterDeviceResp);
+  rpc AddUser (AddUserReq) returns (AddUserResp);
+  rpc GetUser (GetUserReq) returns (GetUserResp);
+  rpc SendMessage(SendMessageReq) returns(SendMessageResp);
 }

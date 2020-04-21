@@ -2,8 +2,8 @@ package ws_conn
 
 import (
 	"context"
+	"github.com/aijie/michat/datas/model"
 	"github.com/aijie/michat/datas/pb"
-	"github.com/aijie/michat/server/grpclib"
 	"github.com/aijie/michat/server/logger"
 )
 
@@ -13,7 +13,7 @@ func DeliverMessage(ctx context.Context, req *pb.DeliverMessageReq) error {
 		logger.Sugar.Warn("conn id not found")
 		return nil
 	}
-	reqId := grpclib.GetCtxRequestId(ctx)
+	reqId := model.GetCtxRequestId(ctx)
 	conn.Output(pb.SessionType_MessageStream, reqId, nil, req.Message)
 	return nil
 }
